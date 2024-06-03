@@ -10,6 +10,11 @@ import { Handle } from "./handle";
 // override showHandles, adjustForChangedRoot(), and adjustForChangedTip().
 // If it involves additional shapes not stored in pathStroke and pathFill,
 // it should override fillPaths() and allPaths().
+
+interface TailTipPoint {
+    x: number;
+    y: number;
+}
 export class Tail {
     // The path representing the line around the tail.
     // This is usually defined but will be undefined in the
@@ -200,6 +205,10 @@ export class Tail {
                 // Update this.spec.tips to reflect the new handle positions
                 this.spec.tipX = this.tip.x;
                 this.spec.tipY = this.tip.y;
+
+                const tailTipMoveEvent = new CustomEvent<TailTipPoint>("tipMove", {
+                    detail: { x: this.tip.x, y: this.tip.y }
+                });
                 this.persistSpecChanges();
                 this.uniteBubbleShapes();
             };

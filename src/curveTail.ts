@@ -7,6 +7,11 @@ import { Handle } from "./handle";
 // An abstract class for tails which, like ArcTail and ThoughtTail,
 // have a handle to control a mid-point which configures their shape.
 // Typically something follows a curve through the midpoint to the tip.
+
+interface CurveTailMidPoint {
+    x: number;
+    y: number;
+}
 export class CurveTail extends Tail {
     mid: paper.Point;
 
@@ -34,6 +39,9 @@ export class CurveTail extends Tail {
             this.midHandle.setPosition(newPosition);
         }
         if (this.spec) {
+            const midMoveEvent = new CustomEvent<CurveTailMidPoint>("midMove", {
+                detail: { x: newPosition.x, y: newPosition.y }
+            });
             this.spec.midpointX = newPosition.x;
             this.spec.midpointY = newPosition.y;
         }
